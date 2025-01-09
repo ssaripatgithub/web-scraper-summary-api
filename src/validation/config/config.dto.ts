@@ -32,4 +32,8 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   SUMMARIZE_PROMPT: string;
+
+  @IsString()
+  @IsNotEmpty()
+  LLM_MIN_TOKEN: string;
 }

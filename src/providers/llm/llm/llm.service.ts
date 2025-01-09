@@ -10,7 +10,7 @@ const {
   LLM_API = '',
   LLM_MODEL = '',
   LLM_API_KEY = '',
-  // LLM_MAX_TOKEN = '',
+  LLM_MAX_TOKEN = '',
   LLM_ROLE = '',
   LLM_MIN_TOKEN = '',
   SUMMARIZE_PROMPT = '',
@@ -39,7 +39,7 @@ export class LlmService {
           content: prompt.slice(0, +LLM_MIN_TOKEN),
         },
       ],
-      // max_tokens: +LLM_MAX_TOKEN,
+      max_tokens: +LLM_MAX_TOKEN,
     };
     const config = {
       headers: {
@@ -50,7 +50,7 @@ export class LlmService {
     return lastValueFrom(this.httpService.post(LLM_API, request_body, config))
       .then((response: AxiosResponse) => {
         const summary =
-          response?.data?.choices[0]?.message?.content.trim() ?? '';
+          response?.data?.choices[0]?.message?.content?.trim() ?? '';
         return {
           success: true,
           summary,
