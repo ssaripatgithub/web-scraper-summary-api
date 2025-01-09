@@ -27,5 +27,9 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
+  LLM_ROLE: string;
+
+  @IsString()
+  @IsNotEmpty()
   SUMMARIZE_PROMPT: string;
 }
