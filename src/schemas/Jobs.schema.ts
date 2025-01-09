@@ -2,7 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class Job {
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true })
   url: string;
 
   @Prop({ required: false })
@@ -13,6 +13,9 @@ export class Job {
 
   @Prop({ required: false })
   error_message?: string;
+
+  @Prop({ required: false })
+  created_date?: Date;
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);
