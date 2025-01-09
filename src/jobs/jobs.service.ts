@@ -17,7 +17,7 @@ export class JobsService {
 
   async createJob(params: CreateJobDto) {
     try {
-      const new_job = new this.jobModel(params);
+      const new_job = new this.jobModel(params).save();
       return new_job;
     } catch (error) {
       const message = error.message || Messages.SOMETHING_WENT_WRONG;
