@@ -16,6 +16,9 @@ export class Job {
 
   @Prop({ required: false })
   created_date?: Date;
+
+  @Prop({ required: false })
+  updated_date?: Date;
 }
 
 export const JobSchema = SchemaFactory.createForClass(Job);

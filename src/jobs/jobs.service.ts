@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { Job } from 'src/schemas/Jobs.schema';
 import { CreateJobDto } from './dto/CreateJob.dto';
 import { Messages } from 'src/constants';
+import { UpdateJobDto } from './dto/UpdateJob.dto';
+import { Result } from 'src/types';
 
 @Injectable()
 export class JobsService {
@@ -17,15 +19,40 @@ export class JobsService {
 
   async createJob(params: CreateJobDto) {
     try {
-      const new_job = new this.jobModel(params).save();
-      return new_job;
+      const new_job = await new this.jobModel(params).save();
+      return {
+        success: true,
+        data: new_job.toObject(),
+      };
     } catch (error) {
       const message = error.message || Messages.SOMETHING_WENT_WRONG;
-      this.logger.log(`${Messages.ERROR_SAVING_JOB} ${message}`);
+      this.logger.error(`${Messages.ERROR_SAVING_JOB} ${message}`);
 
       return {
         success: false,
         message: `${Messages.JOB_CREATION_FAILED} ${message}`,
+      };
+    }
+  }
+
+  async updateJob(id: string, params: UpdateJobDto): Promise<Result> {
+    try {
+      const result = await this.jobModel.findByIdAndUpdate(id, params, {
+        new: true,
+      });
+      const data = result?.toObject();
+      return {
+        success: true,
+        message: '',
+        data,
+      };
+    } catch (error) {
+      const message = `Failed to update job ID: ${id} : ${error?.message}`;
+      this.logger.error(message);
+      return {
+        success: false,
+        message,
+        data: null,
       };
     }
   }

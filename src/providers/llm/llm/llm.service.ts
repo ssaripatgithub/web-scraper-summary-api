@@ -3,9 +3,10 @@ import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { AxiosError, AxiosResponse } from 'axios';
 import { Messages } from 'src/constants';
-import { GenerateSummaryOutput } from './llm.types';
 import { UtilsService } from 'src/utils/utils.service';
 import { IsObject } from 'class-validator';
+import { Result } from 'src/types';
+import { GenerateSummaryInput } from './llm.types';
 const {
   LLM_API = '',
   LLM_MODEL = '',
@@ -27,7 +28,8 @@ export class LlmService {
   ) {
     this.logger = new Logger(LlmService.name);
   }
-  async generateSummary(text: string): Promise<GenerateSummaryOutput> {
+  async generateSummary(params: GenerateSummaryInput): Promise<Result> {
+    const { text, job_id } = params;
     const sanitized_text = this.utilsService.sanitizeScrapedText(text);
     const prompt = `${SUMMARIZE_PROMPT} ${sanitized_text}`;
     const request_body = {
@@ -51,10 +53,11 @@ export class LlmService {
       .then((response: AxiosResponse) => {
         const summary =
           response?.data?.choices[0]?.message?.content?.trim() ?? '';
+        this.logger.log(`Generated summary for job ID: ${job_id}`);
         return {
           success: true,
-          summary,
-          error_message: '',
+          data: summary,
+          message: '',
         };
       })
       .catch((error: AxiosError) => {
@@ -70,11 +73,11 @@ export class LlmService {
           message = data?.message || '';
         }
         message = message || error?.message || Messages.SOMETHING_WENT_WRONG;
-        this.logger.error(`Error in Llm request: ${message}`);
+        this.logger.error(`Error while generating summary: ${message}`);
         return {
           success: false,
-          summary: '',
-          error_message: message,
+          data: '',
+          message,
         };
       });
   }

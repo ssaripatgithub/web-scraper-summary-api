@@ -44,35 +44,61 @@ export class JobsController {
   async createJob(@Body() params: CreateJobDto) {
     const { url } = params;
 
+    this.logger.log(`Received request to scrape URL: ${url}`);
+
     let summary = '';
-    let status = JobStatuses.FAILED;
+    let status = JobStatuses.PENDING;
     let error_message = '';
 
+    const create_job_result = await this.jobsService.createJob({
+      ...params,
+      status,
+      created_date: new Date(),
+    });
+
+    if (!create_job_result?.success) {
+      return create_job_result;
+    }
+
+    const job_id = create_job_result?.data?._id.toString();
     try {
-      const text = await this.scraperService.scrapeWebpage(url);
+      this.logger.log(`Scraping text for job ID: ${job_id}`);
+      const scrape_result = await this.scraperService.scrapeWebpage(url);
 
-      if (!text) {
-        error_message = Messages.NO_TEXT_CONTENT_FOUND;
-      }
+      if (!scrape_result?.success) {
+        error_message =
+          scrape_result?.message || Messages.NO_TEXT_CONTENT_FOUND;
+      } else {
+        const scraped_text = scrape_result?.data ?? '';
+        const result = await this.llmService.generateSummary(scraped_text);
+        summary = result?.data ?? '';
+        status = result?.success ? JobStatuses.COMPLETED : JobStatuses.FAILED;
 
-      const result = await this.llmService.generateSummary(text);
-      summary = result?.summary ?? '';
-      status = result?.success ? JobStatuses.COMPLETED : JobStatuses.FAILED;
-
-      if (!result?.success) {
-        error_message = result?.error_message;
+        if (!result?.success) {
+          error_message = result?.message;
+        }
       }
     } catch (error) {
       error_message = error_message || error.message;
       this.logger.error('Error in createJob:', error_message);
     }
 
-    return this.jobsService.createJob({
+    const update_params = {
       ...params,
       summary,
       status,
       ...(error_message && { error_message }),
-      created_date: new Date(),
-    });
+      updated_date: new Date(),
+    };
+    const update_result = await this.jobsService.updateJob(
+      job_id,
+      update_params,
+    );
+    if (!update_result?.success) {
+      return {
+        ...update_params,
+        error_message: `Failed to process job ID: ${job_id}`,
+      };
+    }
   }
 }

@@ -1,5 +1,4 @@
-export interface GenerateSummaryOutput {
-  success: boolean;
-  summary: string;
-  error_message: string;
+export interface GenerateSummaryInput {
+  text: string;
+  job_id: string;
 }
