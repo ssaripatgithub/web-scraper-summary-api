@@ -1,0 +1,39 @@
+name: ci
+
+on: push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      # Install Bun
+      - name: Install Bun
+        run: curl -fsSL https://bun.sh/install | bash
+
+      # Set up Bun to be available in the CI environment
+      - name: Add Bun to PATH
+        run: echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
+      # Install dependencies with Bun
+      - name: Install dependencies
+        run: bun install
+
+      # Run Linter
+      - name: Run Linter
+        run: bun lint
+
+      # Run coverage
+      - name: Run tests
+        run: bun test:coverage
+
+      # Run e2e tests
+      - name: Run e2e tests
+        run: bun test:e2e
