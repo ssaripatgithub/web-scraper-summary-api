@@ -15,11 +15,11 @@ import mongoose from 'mongoose';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/CreateJob.dto';
 import { JobStatuses } from './jobs.types';
-import { ScraperService } from '../providers/scraper/scraper/scraper.service';
-import { LlmService } from '../providers/llm/llm/llm.service';
 import { Messages } from '../constants';
 import { Job } from '../schemas/Jobs.schema';
 import { Result } from '../types';
+import { ScraperService } from '../providers/scraper/scraper.service';
+import { LlmService } from '../providers/llm/llm.service';
 
 @Controller('jobs')
 export class JobsController {

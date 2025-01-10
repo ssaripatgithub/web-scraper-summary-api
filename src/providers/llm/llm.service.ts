@@ -2,11 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
 import { AxiosError, AxiosResponse } from 'axios';
-import { Messages } from '../../../constants';
 import { IsObject } from 'class-validator';
 import { GenerateSummaryInput } from './llm.types';
-import { Result } from '../../../types';
-import { UtilsService } from '../../../utils/utils.service';
+import { UtilsService } from '../../utils/utils.service';
+import { Result } from '../../types';
+import { Messages } from '../../constants';
 const {
   LLM_API = '',
   LLM_MODEL = '',
