@@ -3,7 +3,7 @@ import { JobsService } from './jobs.service';
 import { JobsController } from './jobs.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LlmModule } from '../providers/llm/llm/llm.module';
-import { ScrapperModule } from '../providers/scraper/scraper/scraper.module';
+import { ScraperModule } from '../providers/scraper/scraper/scraper.module';
 import { Job, JobSchema } from '../schemas/Jobs.schema';
 
 @Module({
@@ -16,7 +16,7 @@ import { Job, JobSchema } from '../schemas/Jobs.schema';
         schema: JobSchema,
       },
     ]),
-    ScrapperModule,
+    ScraperModule,
     LlmModule,
   ],
 })

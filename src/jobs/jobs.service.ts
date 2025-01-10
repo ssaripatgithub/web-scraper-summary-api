@@ -17,12 +17,13 @@ export class JobsService {
     return this.jobModel.findById(id);
   }
 
-  async createJob(params: CreateJobDto) {
+  async createJob(params: CreateJobDto): Promise<Result> {
     try {
       const new_job = await new this.jobModel(params).save();
       return {
         success: true,
         data: new_job.toObject(),
+        message: '',
       };
     } catch (error) {
       const message = error.message || Messages.SOMETHING_WENT_WRONG;
@@ -31,6 +32,7 @@ export class JobsService {
       return {
         success: false,
         message: `${Messages.JOB_CREATION_FAILED} ${message}`,
+        data: null,
       };
     }
   }

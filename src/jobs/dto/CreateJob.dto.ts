@@ -23,5 +23,5 @@ export class CreateJobDto {
 
   @IsDate()
   @IsOptional()
-  created_date: Date;
+  created_date?: Date;
 }

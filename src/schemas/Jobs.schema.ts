@@ -2,6 +2,9 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class Job {
+  @Prop({ required: false })
+  _id?: string;
+
   @Prop({ required: true })
   url: string;
 

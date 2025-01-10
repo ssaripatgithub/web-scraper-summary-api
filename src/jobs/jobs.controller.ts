@@ -18,6 +18,8 @@ import { JobStatuses } from './jobs.types';
 import { ScraperService } from '../providers/scraper/scraper/scraper.service';
 import { LlmService } from '../providers/llm/llm/llm.service';
 import { Messages } from '../constants';
+import { Job } from '../schemas/Jobs.schema';
+import { Result } from '../types';
 
 @Controller('jobs')
 export class JobsController {
@@ -31,7 +33,7 @@ export class JobsController {
   }
 
   @Get(':id')
-  async getJobById(@Param('id') id: string) {
+  async getJobById(@Param('id') id: string): Promise<Job> {
     const is_valid = mongoose.Types.ObjectId.isValid(id);
     if (!is_valid) throw new HttpException(Messages.INVALID_ID, BAD_REQUEST);
     const result = await this.jobsService.getJobById(id);
@@ -41,7 +43,7 @@ export class JobsController {
 
   @Post()
   @UsePipes(new ValidationPipe())
-  async createJob(@Body() params: CreateJobDto) {
+  async createJob(@Body() params: CreateJobDto): Promise<Result | Job> {
     const { url } = params;
 
     this.logger.log(`Received request to scrape URL: ${url}`);

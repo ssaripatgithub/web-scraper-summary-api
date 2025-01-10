@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from '../src/validation/config/config.validate';
 import { JobsModule } from '../src/jobs/jobs.module';
-import { ScrapperModule } from '../src/providers/scraper/scraper/scraper.module';
+import { ScraperModule } from '../src/providers/scraper/scraper/scraper.module';
 import { LlmModule } from '../src/providers/llm/llm/llm.module';
 import { UtilsModule } from '../src/utils/utils.module';
 import { HttpModule } from '@nestjs/axios';
@@ -43,7 +43,7 @@ describe('AppController (e2e)', () => {
         }),
         JobsModule,
         MongooseModule.forRoot(mongo_uri),
-        ScrapperModule,
+        ScraperModule,
         LlmModule,
         UtilsModule,
         HttpModule,
@@ -59,7 +59,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  it('/ (GET)', () => {
+  it('should return 400 for invalid job id', () => {
     return request(app.getHttpServer()).get('/jobs/1').expect(400);
   });
 });
