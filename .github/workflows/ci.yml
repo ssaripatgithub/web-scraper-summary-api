@@ -32,7 +32,7 @@ jobs:
 
       # Run coverage
       - name: Run tests
-        run: bun test:coverage
+        run: bun test:cov
 
       # Run e2e tests
       - name: Run e2e tests
