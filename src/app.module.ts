@@ -6,6 +6,7 @@ import { LlmModule } from './providers/llm/llm/llm.module';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './validation/config/config.validate';
 import { UtilsModule } from './utils/utils.module';
+import { HttpModule } from '@nestjs/axios';
 const { DATABASE_CONNECTION = '' } = process.env;
 
 @Module({
@@ -19,6 +20,7 @@ const { DATABASE_CONNECTION = '' } = process.env;
     ScrapperModule,
     LlmModule,
     UtilsModule,
+    HttpModule,
   ],
   controllers: [],
   providers: [],

@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Job } from 'src/schemas/Jobs.schema';
 import { CreateJobDto } from './dto/CreateJob.dto';
-import { Messages } from 'src/constants';
 import { UpdateJobDto } from './dto/UpdateJob.dto';
-import { Result } from 'src/types';
+import { Job } from '../schemas/Jobs.schema';
+import { Messages } from '../constants';
+import { Result } from '../types';
 
 @Injectable()
 export class JobsService {

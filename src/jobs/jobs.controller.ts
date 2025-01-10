@@ -15,9 +15,9 @@ import mongoose from 'mongoose';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/CreateJob.dto';
 import { JobStatuses } from './jobs.types';
-import { Messages } from 'src/constants';
-import { ScraperService } from 'src/providers/scraper/scraper/scraper.service';
-import { LlmService } from 'src/providers/llm/llm/llm.service';
+import { ScraperService } from '../providers/scraper/scraper/scraper.service';
+import { LlmService } from '../providers/llm/llm/llm.service';
+import { Messages } from '../constants';
 
 @Controller('jobs')
 export class JobsController {
