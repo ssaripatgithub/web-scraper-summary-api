@@ -9,7 +9,7 @@ export function PromMonit() {
   ) {
     const originalMethod = descriptor.value;
     // convert camelCase to snake_case
-    const metric_name = property_key.replace(/([A-Z])/g, '_$1').toLowerCase();
+    const metric_name = property_key?.replace(/([A-Z])/g, '_$1')?.toLowerCase();
 
     descriptor.value = async function (...args: any[]) {
       const prometheusService: PrometheusService = this.prometheusService;
@@ -42,7 +42,6 @@ export function PromMonit() {
 
         // Increment the counter for successful jobs
         counter.labels('completed').inc();
-        console.log('Counter incremented for completed job');
 
         // Record the processing time
         const duration = (Date.now() - start) / 1000;
@@ -52,7 +51,6 @@ export function PromMonit() {
       } catch (error) {
         // Increment the counter for failed jobs
         counter.labels('failed').inc();
-        console.log('Counter incremented for failed job');
 
         // Record the processing time for failed jobs
         const duration = (Date.now() - start) / 1000;

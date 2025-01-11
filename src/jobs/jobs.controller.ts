@@ -76,8 +76,11 @@ export class JobsController {
         error_message =
           scrape_result?.message || Messages.NO_TEXT_CONTENT_FOUND;
       } else {
-        const scraped_text = scrape_result?.data ?? '';
-        const result = await this.llmService.generateSummary(scraped_text);
+        const scraped_text: string = scrape_result?.data ?? '';
+        const result = await this.llmService.generateSummary({
+          text: scraped_text,
+          job_id,
+        });
         summary = result?.data ?? '';
         status = result?.success ? JobStatuses.COMPLETED : JobStatuses.FAILED;
 

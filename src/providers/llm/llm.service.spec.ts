@@ -2,8 +2,8 @@ import 'dotenv/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LlmService } from './llm.service';
 import { HttpService } from '@nestjs/axios';
-import { UtilsModule } from '../../../utils/utils.module';
 import { of } from 'rxjs';
+import { UtilsModule } from '../../utils/utils.module';
 
 describe('LlmService', () => {
   let service: LlmService;
@@ -49,7 +49,6 @@ describe('LlmService', () => {
       text: prompt,
       job_id: '12345',
     });
-    console.log(response);
     const summary = response?.data;
     expect(summary).toEqual(mock_summary);
   });

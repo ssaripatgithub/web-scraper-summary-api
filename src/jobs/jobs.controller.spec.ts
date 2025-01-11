@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JobsController } from './jobs.controller';
 import { JobsService } from './jobs.service';
-import { ScraperModule } from '../providers/scraper/scraper/scraper.module';
-import { LlmModule } from '../providers/llm/llm/llm.module';
 import { Job } from '../schemas/Jobs.schema';
 import { jobStub } from './stubs/jobs.stub';
 import { CreateJobDto } from './dto/CreateJob.dto';
+import { ScraperModule } from '../providers/scraper/scraper.module';
+import { LlmModule } from '../providers/llm/llm.module';
+import { PrometheusModule } from '../providers/prometheus/prometheus.module';
 
 jest.mock('./jobs.service');
 
@@ -17,7 +18,7 @@ describe('JobsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [JobsService],
       controllers: [JobsController],
-      imports: [ScraperModule, LlmModule],
+      imports: [ScraperModule, LlmModule, PrometheusModule],
     }).compile();
 
     controller = module.get<JobsController>(JobsController);

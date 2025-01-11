@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { JobsService } from './jobs.service';
 import { getModelToken } from '@nestjs/mongoose';
 import { Job } from '../schemas/Jobs.schema';
-import { LlmModule } from '../providers/llm/llm/llm.module';
 import { JobsController } from './jobs.controller';
 import { CreateJobDto } from './dto/CreateJob.dto';
-import { ScraperModule } from '../providers/scraper/scraper/scraper.module';
+import { ScraperModule } from '../providers/scraper/scraper.module';
+import { LlmModule } from '../providers/llm/llm.module';
+import { PrometheusModule } from '../providers/prometheus/prometheus.module';
 
 describe('JobsService', () => {
   let service: JobsService;
@@ -37,7 +38,7 @@ describe('JobsService', () => {
           useValue: mockJobModel,
         },
       ],
-      imports: [ScraperModule, LlmModule],
+      imports: [ScraperModule, LlmModule, PrometheusModule],
     }).compile();
 
     service = module.get<JobsService>(JobsService);
