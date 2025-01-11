@@ -70,6 +70,11 @@ The web scraper summary api is built using the following technologies:
 | `created_date` | The date when the job was created.                        |
 | `updated_date` | The date when the job was last updated.                   |
 
+#### 5. Prometheus Monitoring
+- **Job Count**: Tracks the number of jobs processed.
+- **Job Status**: Monitors the number of jobs in different statuses (`pending`, `completed`, `failed`).
+- **Scraping Success Rate**: Monitor success rate of web scraping operations.
+
 ## Technical Decisions
 ### 1. NestJS as the Backend Framework
 - **Why**: NestJS is a modern, scalable, and maintainable framework built with TypeScript. It provides a powerful set of features such as dependency injection, modular architecture, and easy integration with other libraries and tools. It was chosen for its developer-friendly approach, strong TypeScript support, and the ability to easily scale the application in the future with a modular design.
@@ -122,3 +127,10 @@ The Admin wanted a proof of concept (POC) of a service that allow users to gener
 ### Proposed Solution:
 - Implement caching mechanism (e.g., Redis) to store and reuse summaries for previously scraped URLs.
 - Introduce rate limits and tiered pricing plans to balance costs and ensure fair usage.
+
+### 4. Monitoring
+### Current Limitation:
+- Prometheus counters and not persistent across restarts. If retaining the counter value is critical for future features, consider using persistent storage.
+
+### Proposed Solution:
+- Persist counter values using database like Redis or remote storage integrations (e.g., AWS Timestream or Cortex).

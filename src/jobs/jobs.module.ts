@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Job, JobSchema } from '../schemas/Jobs.schema';
 import { ScraperModule } from '../providers/scraper/scraper.module';
 import { LlmModule } from '../providers/llm/llm.module';
+import { PrometheusModule } from '../providers/prometheus/prometheus.module';
 
 @Module({
   providers: [JobsService],
@@ -18,6 +19,7 @@ import { LlmModule } from '../providers/llm/llm.module';
     ]),
     ScraperModule,
     LlmModule,
+    PrometheusModule,
   ],
 })
 export class JobsModule {}

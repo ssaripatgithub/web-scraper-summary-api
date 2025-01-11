@@ -20,6 +20,8 @@ import { Job } from '../schemas/Jobs.schema';
 import { Result } from '../types';
 import { ScraperService } from '../providers/scraper/scraper.service';
 import { LlmService } from '../providers/llm/llm.service';
+import { PromMonit } from '../metrics/prom-monit.decorator';
+import { PrometheusService } from '../providers/prometheus/prometheus.service';
 
 @Controller('jobs')
 export class JobsController {
@@ -28,11 +30,13 @@ export class JobsController {
     private readonly jobsService: JobsService,
     private readonly scraperService: ScraperService,
     private readonly llmService: LlmService,
+    private readonly prometheusService: PrometheusService,
   ) {
     this.logger = new Logger(JobsController.name);
   }
 
   @Get(':id')
+  @PromMonit()
   async getJobById(@Param('id') id: string): Promise<Job> {
     const is_valid = mongoose.Types.ObjectId.isValid(id);
     if (!is_valid) throw new HttpException(Messages.INVALID_ID, BAD_REQUEST);
@@ -43,9 +47,10 @@ export class JobsController {
 
   @Post()
   @UsePipes(new ValidationPipe())
+  @PromMonit()
   async createJob(@Body() params: CreateJobDto): Promise<Result | Job> {
     const { url } = params;
-
+    // this.jobRequestsCounter.inc({ method: 'POST', status: 'pending' });
     this.logger.log(`Received request to scrape URL: ${url}`);
 
     let summary = '';
@@ -86,6 +91,7 @@ export class JobsController {
     }
 
     const update_params = {
+      _id: job_id,
       ...params,
       summary,
       status,
@@ -102,5 +108,12 @@ export class JobsController {
         error_message: `Failed to process job ID: ${job_id}`,
       };
     }
+
+    return update_result?.data;
+  }
+
+  @Get('/metrics/metrics')
+  async getMetrics(): Promise<string> {
+    return this.prometheusService.getMetrics();
   }
 }
