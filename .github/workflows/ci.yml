@@ -11,6 +11,7 @@ jobs:
       LLM_API: https://api.aimlapi.com/chat/completions
       LLM_MODEL: gpt-4o
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      DATABASE_CONNECTION: ${{ secrets.DATABASE_CONNECTION }}
       SUMMARIZE_PROMPT: Summarize the following text from the webpage
       LLM_MAX_TOKEN: 500
       LLM_MIN_TOKEN: 200
