@@ -6,6 +6,7 @@ import { Job, JobSchema } from '../schemas/Jobs.schema';
 import { ScraperModule } from '../providers/scraper/scraper.module';
 import { LlmModule } from '../providers/llm/llm.module';
 import { PrometheusModule } from '../providers/prometheus/prometheus.module';
+import { UtilsModule } from '../utils/utils.module';
 
 @Module({
   providers: [JobsService],
@@ -20,6 +21,7 @@ import { PrometheusModule } from '../providers/prometheus/prometheus.module';
     ScraperModule,
     LlmModule,
     PrometheusModule,
+    UtilsModule,
   ],
 })
 export class JobsModule {}

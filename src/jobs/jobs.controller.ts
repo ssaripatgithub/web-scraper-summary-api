@@ -16,8 +16,6 @@ import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/CreateJob.dto';
 import { JobStatuses } from './jobs.types';
 import { Messages } from '../constants';
-import { Job } from '../schemas/Jobs.schema';
-import { Result } from '../types';
 import { ScraperService } from '../providers/scraper/scraper.service';
 import { LlmService } from '../providers/llm/llm.service';
 import { PromMonit } from '../metrics/prom-monit.decorator';
@@ -37,18 +35,26 @@ export class JobsController {
 
   @Get(':id')
   @PromMonit()
-  async getJobById(@Param('id') id: string): Promise<Job> {
+  async getJobById(@Param('id') id: string) {
     const is_valid = mongoose.Types.ObjectId.isValid(id);
     if (!is_valid) throw new HttpException(Messages.INVALID_ID, BAD_REQUEST);
     const result = await this.jobsService.getJobById(id);
     if (!result) throw new HttpException(Messages.JOB_NOT_FOUND, NOT_FOUND);
-    return result;
+    const record = result.toObject();
+    const { url, status, summary, error_message } = record;
+    return {
+      id: record._id.toString(),
+      url,
+      status,
+      summary,
+      error_message,
+    };
   }
 
   @Post()
   @UsePipes(new ValidationPipe())
   @PromMonit()
-  async createJob(@Body() params: CreateJobDto): Promise<Result | Job> {
+  async createJob(@Body() params: CreateJobDto) {
     const { url } = params;
     // this.jobRequestsCounter.inc({ method: 'POST', status: 'pending' });
     this.logger.log(`Received request to scrape URL: ${url}`);
@@ -94,17 +100,18 @@ export class JobsController {
     }
 
     const update_params = {
-      _id: job_id,
+      id: job_id,
       ...params,
       summary,
       status,
       ...(error_message && { error_message }),
-      updated_date: new Date(),
     };
-    const update_result = await this.jobsService.updateJob(
-      job_id,
-      update_params,
-    );
+
+    const update_result = await this.jobsService.updateJob(job_id, {
+      ...update_params,
+      updated_date: new Date(),
+    });
+
     if (!update_result?.success) {
       return {
         ...update_params,
@@ -112,11 +119,6 @@ export class JobsController {
       };
     }
 
-    return update_result?.data;
-  }
-
-  @Get('/metrics/metrics')
-  async getMetrics(): Promise<string> {
-    return this.prometheusService.getMetrics();
+    return update_params;
   }
 }

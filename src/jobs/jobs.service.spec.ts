@@ -7,6 +7,7 @@ import { CreateJobDto } from './dto/CreateJob.dto';
 import { ScraperModule } from '../providers/scraper/scraper.module';
 import { LlmModule } from '../providers/llm/llm.module';
 import { PrometheusModule } from '../providers/prometheus/prometheus.module';
+import { UtilsModule } from '../utils/utils.module';
 
 describe('JobsService', () => {
   let service: JobsService;
@@ -38,7 +39,7 @@ describe('JobsService', () => {
           useValue: mockJobModel,
         },
       ],
-      imports: [ScraperModule, LlmModule, PrometheusModule],
+      imports: [ScraperModule, LlmModule, PrometheusModule, UtilsModule],
     }).compile();
 
     service = module.get<JobsService>(JobsService);

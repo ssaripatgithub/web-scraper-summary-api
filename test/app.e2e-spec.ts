@@ -8,10 +8,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from '../src/validation/config/config.validate';
 import { JobsModule } from '../src/jobs/jobs.module';
-import { ScraperModule } from '../src/providers/scraper/scraper/scraper.module';
-import { LlmModule } from '../src/providers/llm/llm/llm.module';
 import { UtilsModule } from '../src/utils/utils.module';
 import { HttpModule } from '@nestjs/axios';
+import { ScraperModule } from '../src/providers/scraper/scraper.module';
+import { LlmModule } from '../src/providers/llm/llm.module';
 
 let mongoServer: MongoMemoryServer;
 let mongo_uri: string;

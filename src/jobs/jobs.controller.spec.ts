@@ -7,6 +7,7 @@ import { CreateJobDto } from './dto/CreateJob.dto';
 import { ScraperModule } from '../providers/scraper/scraper.module';
 import { LlmModule } from '../providers/llm/llm.module';
 import { PrometheusModule } from '../providers/prometheus/prometheus.module';
+import { UtilsModule } from '../utils/utils.module';
 
 jest.mock('./jobs.service');
 
@@ -18,7 +19,7 @@ describe('JobsController', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [JobsService],
       controllers: [JobsController],
-      imports: [ScraperModule, LlmModule, PrometheusModule],
+      imports: [ScraperModule, LlmModule, PrometheusModule, UtilsModule],
     }).compile();
 
     controller = module.get<JobsController>(JobsController);
@@ -29,6 +30,11 @@ describe('JobsController', () => {
   describe('getJobById', () => {
     describe('when getJobById is called', () => {
       let job: Job;
+      const final_job_record = {
+        ...jobStub(),
+        id: jobStub()._id.toString(),
+        _id: undefined,
+      };
 
       beforeEach(async () => {
         job = await controller.getJobById(jobStub()._id);
@@ -39,7 +45,7 @@ describe('JobsController', () => {
       });
 
       test('then it should return a job', () => {
-        expect(job).toEqual(jobStub());
+        expect(job).toEqual(final_job_record);
       });
     });
   });

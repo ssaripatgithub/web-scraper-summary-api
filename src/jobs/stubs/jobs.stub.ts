@@ -12,6 +12,4 @@ export const jobStub = (): JobStub => ({
   status: 'pending',
   summary: '',
   error_message: '',
-  created_date: new Date('2025-01-10T05:38:05.386Z'),
-  updated_date: new Date('2025-01-10T05:38:05.386Z'),
 });
